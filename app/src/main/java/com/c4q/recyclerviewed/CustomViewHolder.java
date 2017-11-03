@@ -44,7 +44,7 @@ class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickLi
                 if(sendIntent.resolveActivity(view.getContext().getPackageManager()) != null){
                     view.getContext().startActivity(sendIntent);
                 }else{
-                    Toast.makeText(view.getContext(), "Doesn't work", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(view.getContext(), "Action can't be completed", Toast.LENGTH_SHORT).show();
                 }
             }
         });
