@@ -14,7 +14,7 @@ import android.widget.Toast;
  * binds the new info to the created view-holder, instead of creating a new one, which it only does if it needs to.
  */
 
-class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+class CustomViewHolder extends RecyclerView.ViewHolder{
 
     private TextView textView;
 
@@ -29,29 +29,33 @@ class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickLi
         itemView.setBackgroundColor(Color.parseColor(color));
 
         textView = (TextView) itemView.findViewById(R.id.item_position_text_view);
-        Button button = (Button) itemView.findViewById(R.id.share_button);
         textView.setText(String.valueOf(position));
+
+        //create a reference to the button
+        Button button = (Button) itemView.findViewById(R.id.share_button);
+        //set click listener
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent sendIntent = new Intent(Intent.ACTION_SEND)
-                        .putExtra(Intent.EXTRA_TEXT, textView.getText())
-                        .setType("text/plain");
-                if(sendIntent
-                        .resolveActivity(view.getContext()
-                                .getPackageManager()) != null){
-                    view
-                            .getContext()
-                            .startActivity(sendIntent);
+                //create intent and specify the action the intent will be used for
+                Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                //put extras, EXTRA_TEXT will be automatically accessed by the OS
+                sendIntent.putExtra(Intent.EXTRA_TEXT, textView.getText());
+                //the MIME type tells the OS the format type of our text
+                sendIntent.setType("text/plain");
+
+                //check if the device contains an app capable of executing the action
+                if(sendIntent.resolveActivity(view.getContext().getPackageManager()) != null){
+
+                    //get the context from the view then start the activity
+                    view.getContext().startActivity(sendIntent);
+
                 }else{
-                    Toast.makeText(view.getContext(), "DOesnt work", Toast.LENGTH_SHORT).show();
+                    //if there is no app that can perform the action let the user know
+                    Toast.makeText(view.getContext(), "Action can't be completed", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
-    @Override
-    public void onClick(View view) {
-
-    }
 }
