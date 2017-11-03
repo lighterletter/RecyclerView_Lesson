@@ -33,17 +33,31 @@ class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickLi
         backgroundColor = color; //assign the color to the background color for use in the onClick method
 
         textView = itemView.findViewById(R.id.item_position_text_view);
-        Button button = itemView.findViewById(R.id.share_button);
+
         textView.setText(String.valueOf(position));
+
+        //create a reference to the button
+        Button button = (Button) itemView.findViewById(R.id.share_button);
+        //set click listener
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                //create intent and specify the action the intent will be used for
                 Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                //put extras, EXTRA_TEXT will be automatically accessed by the OS
                 sendIntent.putExtra(Intent.EXTRA_TEXT, textView.getText());
+                //the MIME type tells the OS the format type of our text
                 sendIntent.setType("text/plain");
+
+                //check if the device contains an app capable of executing the action
                 if(sendIntent.resolveActivity(view.getContext().getPackageManager()) != null){
+
+                    //get the context from the view then start the activity
                     view.getContext().startActivity(sendIntent);
+
                 }else{
+                    //if there is no app that can perform the action let the user know
                     Toast.makeText(view.getContext(), "Action can't be completed", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -59,4 +73,5 @@ class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickLi
         //intents require context so we get the context from our view
         view.getContext().startActivity(intent);
     }
+
 }
